@@ -1,0 +1,32 @@
+timestamp,symbol,alert_label,tone
+2026-08-28T14:28:26,RELIANCE,RSI oversold (28.2),bullish
+2026-08-28T14:28:26,TATACONSUM,RSI oversold (28.58),bullish
+2026-08-28T14:28:26,ZYDUSLIFE,Fresh bullish MACD crossover,bullish
+2026-08-28T14:28:26,CIPLA,Fresh bearish 200EMA crossover,bearish
+2026-09-04T20:56:20,RELIANCE,Fresh bullish MACD crossover,bullish
+2026-09-04T20:56:20,TATACONSUM,RSI oversold (23.2),bullish
+2026-09-04T20:56:20,BLS,RSI oversold (24.11),bullish
+2026-09-04T20:56:20,ZYDUSLIFE,Fresh bearish MACD crossover,bearish
+2026-09-04T20:56:20,CIPLA,Fresh bearish 200EMA crossover,bearish
+2026-09-04T20:56:20,CIPLA,Volume spike 1.91x avg — Selling,bearish
+2026-09-04T20:56:20,SBIN,RSI oversold (29.63),bullish
+2026-09-05T18:41:08,ASIANPAINT,RSI oversold (25.22),bullish
+2026-09-05T18:41:08,GAIL,Fresh bullish MACD crossover,bullish
+2026-09-05T18:41:09,HDFCBANK,Fresh bearish MACD crossover,bearish
+2026-09-05T18:41:09,HUDCO,RSI oversold (28.95),bullish
+2026-09-05T18:41:09,IRFC,RSI oversold (28.7),bullish
+2026-09-05T18:41:09,NHPC,Fresh bearish MACD crossover,bearish
+2026-09-05T18:41:09,NTPC,Fresh bullish MACD crossover,bullish
+2026-09-05T18:41:09,ONGC,Fresh bullish MACD crossover,bullish
+2026-09-05T18:41:09,RELIANCE,Fresh bullish MACD crossover,bullish
+2026-09-05T18:41:09,SBIN,RSI oversold (29.63),bullish
+2026-09-05T18:41:09,SUZLON,RSI oversold (26.51),bullish
+2026-09-05T18:41:09,TATACONSUM,RSI oversold (23.2),bullish
+2026-09-05T18:41:09,TMPV,RSI oversold (26.09),bullish
+2026-09-05T18:41:09,BLS,RSI oversold (24.11),bullish
+2026-09-05T18:41:09,ZYDUSLIFE,Fresh bearish MACD crossover,bearish
+2026-09-05T18:41:09,CIPLA,Fresh bearish 200EMA crossover,bearish
+2026-09-05T18:41:09,CIPLA,Volume spike 1.91x avg — Selling,bearish
+2026-09-05T18:41:09,ICICIBANK,Fresh bearish MACD crossover,bearish
+2026-09-05T18:41:09,ATULAUTO,RSI oversold (22.87),bullish
+2026-09-05T18:41:09,SETFNIF50,RSI oversold (25.92),bullish
