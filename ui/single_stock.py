@@ -9,7 +9,9 @@ Structure:
   "Your data" — manual pledge/EPS CAGR + notes, collapsed by default
   Raw data tabs — Overview | Fundamentals | Technicals | Valuation & Quality | Chart
   Evaluate button
+  Combined signal banner — ALWAYS visible once evaluated (see below)
   Score panels — ALWAYS visible once evaluated (this is the actual answer)
+  What changed since last check — ALWAYS visible once evaluated, if history exists
   Deployment Advisor — ALWAYS visible once evaluated, if a GTT is active
   Results tabs — Checks | Category Strength | Alternatives | Export | History
 
@@ -21,6 +23,23 @@ anywhere in render_single_stock() — that's why nothing rendered. It needs
 ev["fund_rate"]/ev["tech_rate"], which only exist post-Evaluate, so it's
 called in the always-visible section right after the reject-log banner,
 using get_gtt_distance() to resolve the nearest GTT level for the symbol.
+
+FIX (this pass): added core.diff.diff_checks() wiring so each Evaluate
+click shows what flipped since the last logged evaluation for this symbol,
+instead of only showing the rolled-up score delta badge. History's
+"checks" column holds Python lists (not a scalar type Arrow can infer),
+so it's dropped from the displayed history table in tab_hist — the full
+column is still used upstream for the diff itself.
+
+ADDED (this pass): combined PP + Short Term View banner. evaluate_short_term()
+is called once inside the Evaluate click (using the bundle's existing
+price_history/rsi14 — no new fetch) and its result is stored in
+st.session_state["last_eval"]["short_term"], same lifecycle as "checks".
+combine_pp_and_short_term() needs a plain 'green'/'yellow'/'red' tier, but
+build_verdict() here returns a hex color code (used directly in
+_score_panel_html's inline CSS) — so the tier is derived from verdict_text
+instead via _pp_tier_from_verdict(), since "Deploy ready"/"Watch"/"Avoid"
+prefixes are stable regardless of the exact hex/icon values in use.
 """
 
 import streamlit as st
@@ -33,6 +52,9 @@ from core.verdict import build_verdict, build_sampat_verdict
 from core.graham import compute_graham_fair_value
 from core.gtt import get_gtt_distance, suggest_partial_entry
 from core.suggestions import get_peer_suggestions
+from core.diff import diff_checks
+from core.short_term_engine import evaluate_short_term
+from core.combined_signal import combine_pp_and_short_term
 from config.sectors import is_bank_or_nbfc, get_sector_icon
 from config.stock_universe import search_universe
 from config.sector_pe import get_sector_pe_benchmark
@@ -100,6 +122,28 @@ def _completeness_badge_html(checks):
     total_listed = len(checks)
     with_data = sum(1 for _, ok in checks if ok is not None)
     return f'<span class="completeness-badge">{with_data}/{total_listed} checks had data</span>'
+
+
+def _pp_tier_from_verdict(verdict_text):
+    """Maps this app's verdict_text prefix to the plain green/yellow/red
+    tier core/combined_signal.py expects. Doesn't rely on the exact hex
+    color value in use — just the stable "Deploy ready"/"Watch"/"Avoid"
+    wording from core/verdict.py's build_verdict()."""
+    if verdict_text.startswith("Deploy"):
+        return "green"
+    if verdict_text.startswith("Avoid"):
+        return "red"
+    return "yellow"  # covers both Watch variants
+
+
+def _combined_banner_html(combined):
+    return (
+        f'<div style="border-left: 4px solid {combined["color"]}; padding: 10px 14px; '
+        f'background: rgba(255,255,255,0.03); border-radius: 6px; margin-bottom: 12px;">'
+        f'<div style="font-size:16px; font-weight:700; color:{combined["color"]};">{combined["headline"]}</div>'
+        f'<div style="font-size:12.5px; color:#c4c8d6; margin-top:4px; line-height:1.4;">{combined["reason"]}</div>'
+        f'</div>'
+    )
 
 
 # ---------------------------------------------------------------------
@@ -425,6 +469,33 @@ def render_departures_board(title, checks):
     st.markdown(f'<div class="board-panel"><div class="board-title">{title}</div>{row_html}</div>', unsafe_allow_html=True)
 
 
+def render_check_changes(changes, has_prev_data):
+    """
+    Renders what flipped since the previous logged evaluation for this
+    symbol. Distinguishes "no prior data to compare" from "compared, and
+    nothing changed" — these look identical to the user otherwise.
+    """
+    if not has_prev_data:
+        st.caption("No prior evaluation with check-level data yet — comparison starts from your next Evaluate click.")
+        return
+    if not changes:
+        st.caption("Compared against your last evaluation — no check changes.")
+        return
+
+    def fmt(status):
+        return "PASS" if status is True else ("FAIL" if status is False else "N/A")
+
+    st.markdown("### 🔄 What changed since last check")
+    for label, prev, curr in changes:
+        if curr is False and prev is not False:
+            arrow = "🔴"
+        elif curr is True and prev is not True:
+            arrow = "🟢"
+        else:
+            arrow = "⚪"
+        st.markdown(f"{arrow} **{label}** — {fmt(prev)} → {fmt(curr)}")
+
+
 def render_category_radar(checks):
     categories = {
         "Valuation": ["PE under 25x", "PEG under 1.0x"],
@@ -604,14 +675,25 @@ def render_single_stock():
 
         prior_hist = load_history(d["symbol"])
         prev_score_pct = int(prior_hist["score_pct"].iloc[-1]) if not prior_hist.empty else None
+        prev_checks = prior_hist["checks"].iloc[-1] if not prior_hist.empty else None
+        has_prev_checks = bool(prev_checks)
+        check_changes = diff_checks(prev_checks, checks)
 
-        log_evaluation(d["symbol"], passed, total, d["current_price"], verdict_text)
+        # --- Short Term View read, computed once here off the same bundle
+        # already in memory (d["price_history"], d["rsi14"]) — no new fetch.
+        # Stored alongside checks so the combined banner below doesn't
+        # recompute it on every Streamlit rerun.
+        short_term_eval = evaluate_short_term(d["price_history"], d["rsi14"])
+
+        log_evaluation(d["symbol"], passed, total, d["current_price"], verdict_text, checks=checks)
 
         st.session_state["last_eval"] = {
             "checks": checks, "passed": passed, "total": total,
             "icon": icon, "verdict_text": verdict_text, "color": color,
             "fund_rate": fund_rate, "tech_rate": tech_rate, "sampat": sampat,
-            "prev_score_pct": prev_score_pct,
+            "prev_score_pct": prev_score_pct, "check_changes": check_changes,
+            "has_prev_checks": has_prev_checks,
+            "short_term": short_term_eval,
         }
 
     if "last_eval" not in st.session_state:
@@ -619,6 +701,20 @@ def render_single_stock():
 
     ev = st.session_state["last_eval"]
     pp_pct = round((ev["passed"] / ev["total"]) * 100) if ev["total"] else 0
+
+    # ---- Combined signal banner — leads the score panels below ----
+    # .get() guards against a session_state["last_eval"] left over from
+    # before this feature existed (same-session only; Streamlit doesn't
+    # persist session_state across restarts, but this is a free safety
+    # net against a stale dict shape either way).
+    short_term_eval = ev.get("short_term")
+    if short_term_eval and short_term_eval.get("decision"):
+        st.write("")
+        pp_tier = _pp_tier_from_verdict(ev["verdict_text"])
+        combined = combine_pp_and_short_term(pp_tier, short_term_eval["decision"])
+        st.markdown(_combined_banner_html(combined), unsafe_allow_html=True)
+        if combined.get("is_buy_call"):
+            st.caption("Head to the Short Term View tab for a stop-loss and position-size suggestion sized to your short-term capital pool.")
 
     # ---- Score panels — always visible, this is the actual answer ----
     st.write("")
@@ -628,6 +724,10 @@ def render_single_stock():
         st.markdown(_delta_badge_html(pp_pct, ev.get("prev_score_pct")) + " " + _completeness_badge_html(ev["checks"]), unsafe_allow_html=True)
     with v2:
         st.markdown(_score_panel_html("SAMPAT MODE", ev["sampat"]["icon"], ev["sampat"]["text"], ev["sampat"]["color"], ev["sampat"]["passed"], ev["sampat"]["total"], ev["sampat"]["pct"]), unsafe_allow_html=True)
+
+    # ---- What changed since last check ----
+    st.write("")
+    render_check_changes(ev.get("check_changes", []), ev.get("has_prev_checks", False))
 
     # ---- Reject-log improvement check — shown regardless of today's verdict ----
     past_rejection = get_last_rejection(d["symbol"])
@@ -723,4 +823,5 @@ def render_single_stock():
             st.caption("No history yet — the Evaluate click above just logged the first entry.")
         else:
             render_score_trend_chart(hist)
-            st.dataframe(hist[::-1], use_container_width=True, hide_index=True)
+            display_hist = hist.drop(columns=["checks"], errors="ignore")
+            st.dataframe(display_hist[::-1], use_container_width=True, hide_index=True)

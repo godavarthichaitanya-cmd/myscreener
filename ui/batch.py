@@ -36,6 +36,14 @@ clicking a header.
 Symbols that errored during scan are always shown (in their own row,
 unaffected by the verdict filter or sort control) rather than silently
 sorting to an arbitrary position — see _split_results().
+
+FIX (this pass): both log_evaluation() call sites (Evaluate all, and the
+per-card Evaluate button) were missing checks=entry["checks"] — meaning
+every batch-logged row wrote an empty checks_json to score_history.csv,
+breaking the "what changed since last check" diff for any symbol
+evaluated via Batch instead of Single Stock. entry["checks"] already
+exists on every ok_entries item from _scan_symbols(), so both call sites
+just needed to pass it through.
 """
 
 import streamlit as st
@@ -116,6 +124,7 @@ def render_batch_tab():
                 log_evaluation(
                     entry["symbol"], entry["passed"], entry["total"],
                     entry["bundle"]["current_price"], entry["verdict_text"],
+                    checks=entry["checks"],
                 )
             st.toast(f"Logged {len(ok_entries)} symbols to score history")
 
@@ -461,7 +470,10 @@ def _render_card(entry):
             compare_selection.remove(symbol)
 
         if st.button("✅ Evaluate", key=f"eval_{symbol}", use_container_width=True):
-            log_evaluation(symbol, entry["passed"], entry["total"], bundle["current_price"], entry["verdict_text"])
+            log_evaluation(
+                symbol, entry["passed"], entry["total"], bundle["current_price"], entry["verdict_text"],
+                checks=entry["checks"],
+            )
             st.toast(f"{symbol} logged to score history")
 
 

@@ -124,3 +124,26 @@ def fresh_ema_crossover(df: pd.DataFrame, period: int = 200, lookback_days: int 
     if ema is None:
         return None
     return fresh_crossover(df["Close"], ema, lookback_days)
+
+def atr(df, period=14):
+    """Average True Range over `period` days. Returns None if there
+    isn't enough price history yet (mirrors how ema_trend/rsi_zone
+    handle insufficient data elsewhere in this file)."""
+    if df is None or len(df) < period + 1:
+        return None
+ 
+    high = df["High"]
+    low = df["Low"]
+    prev_close = df["Close"].shift(1)
+ 
+    true_range = pd.concat([
+        high - low,
+        (high - prev_close).abs(),
+        (low - prev_close).abs(),
+    ], axis=1).max(axis=1)
+ 
+    atr_series = true_range.rolling(period).mean()
+    if atr_series.empty or pd.isna(atr_series.iloc[-1]):
+        return None
+ 
+    return round(float(atr_series.iloc[-1]), 2)

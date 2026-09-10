@@ -30,3 +30,125 @@ timestamp,symbol,alert_label,tone
 2026-09-05T18:41:09,ICICIBANK,Fresh bearish MACD crossover,bearish
 2026-09-05T18:41:09,ATULAUTO,RSI oversold (22.87),bullish
 2026-09-05T18:41:09,SETFNIF50,RSI oversold (25.92),bullish
+2026-09-08T16:42:33,ASIANPAINT,RSI oversold (25.73),bullish
+2026-09-08T16:42:33,HDFCBANK,Fresh bullish MACD crossover,bullish
+2026-09-08T16:42:33,HUDCO,RSI oversold (26.18),bullish
+2026-09-08T16:42:33,IRFC,RSI oversold (27.24),bullish
+2026-09-08T16:42:33,LATENTVIEW,RSI oversold (29.1),bullish
+2026-09-08T16:42:33,NTPC,Fresh bullish MACD crossover,bullish
+2026-09-08T16:42:33,RELIANCE,Fresh bullish MACD crossover,bullish
+2026-09-08T16:42:33,SBIN,Fresh bearish 200EMA crossover,bearish
+2026-09-08T16:42:33,TATACONSUM,RSI oversold (24.41),bullish
+2026-09-08T16:42:33,TMPV,RSI oversold (28.94),bullish
+2026-09-08T16:42:38,BLS,RSI oversold (21.28),bullish
+2026-09-08T16:42:48,ZYDUSLIFE,Fresh bearish MACD crossover,bearish
+2026-09-08T16:42:52,CIPLA,Fresh bearish 200EMA crossover,bearish
+2026-09-08T16:43:10,ATULAUTO,RSI oversold (22.3),bullish
+2026-09-08T16:43:30,TATAPOWER,Fresh bullish MACD crossover,bullish
+2026-09-08T16:43:33,SETFNIF50,RSI oversold (28.34),bullish
+2026-09-10T11:46:14,ASIANPAINT,RSI oversold (26.57),bullish
+2026-09-10T11:46:19,HDFCBANK,Fresh bearish MACD crossover,bearish
+2026-09-10T11:46:22,HUDCO,RSI oversold (24.99),bullish
+2026-09-10T11:46:31,IRCON,RSI oversold (19.29),bullish
+2026-09-10T11:46:34,IRFC,RSI oversold (17.87),bullish
+2026-09-10T11:46:37,LATENTVIEW,RSI oversold (26.47),bullish
+2026-09-10T11:46:51,RVNL,RSI oversold (23.68),bullish
+2026-09-10T11:46:53,RELIANCE,Fresh bearish MACD crossover,bearish
+2026-09-10T11:46:56,SBIN,Fresh bullish 200EMA crossover,bullish
+2026-09-10T11:47:04,TATACONSUM,RSI oversold (26.08),bullish
+2026-09-10T11:47:09,TMPV,RSI oversold (27.6),bullish
+2026-09-10T11:47:21,BLS,RSI oversold (19.61),bullish
+2026-09-10T11:47:40,ATULAUTO,RSI oversold (20.81),bullish
+2026-09-10T11:47:55,SETFNIF50,RSI oversold (15.76),bullish
+2026-09-10T11:49:41,BLS,RSI oversold (19.61),bullish
+2026-09-10T11:55:29,BLS,RSI oversold (19.53),bullish
+2026-09-10T11:55:58,CASTROLIND,Fresh bullish MACD crossover,bullish
+2026-09-10T11:55:58,CASTROLIND,Volume spike 2.07x avg — Selling,bearish
+2026-09-10T11:56:47,RELIANCE,Fresh bearish MACD crossover,bearish
+2026-09-10T11:56:52,BLS,RSI oversold (19.53),bullish
+2026-09-10T11:59:12,ASIANPAINT,RSI oversold (27.39),bullish
+2026-09-10T11:59:20,HDFCBANK,Fresh bearish MACD crossover,bearish
+2026-09-10T11:59:23,HUDCO,RSI oversold (24.99),bullish
+2026-09-10T11:59:31,IRCON,RSI oversold (19.23),bullish
+2026-09-10T11:59:34,IRFC,RSI oversold (18.09),bullish
+2026-09-10T11:59:37,LATENTVIEW,RSI oversold (26.24),bullish
+2026-09-10T11:59:50,RVNL,RSI oversold (23.68),bullish
+2026-09-10T11:59:50,RELIANCE,Fresh bearish MACD crossover,bearish
+2026-09-10T11:59:53,SBIN,Fresh bullish 200EMA crossover,bullish
+2026-09-10T11:59:59,TATACONSUM,RSI oversold (26.96),bullish
+2026-09-10T12:00:05,TMPV,RSI oversold (27.83),bullish
+2026-09-10T12:00:08,BLS,RSI oversold (19.53),bullish
+2026-09-10T12:00:58,ASIANPAINT,RSI oversold (27.39),bullish
+2026-09-10T12:00:58,HDFCBANK,Fresh bearish MACD crossover,bearish
+2026-09-10T12:00:58,HUDCO,RSI oversold (24.99),bullish
+2026-09-10T12:00:59,IRCON,RSI oversold (19.23),bullish
+2026-09-10T12:00:59,IRFC,RSI oversold (18.09),bullish
+2026-09-10T12:00:59,LATENTVIEW,RSI oversold (26.24),bullish
+2026-09-10T12:00:59,RVNL,RSI oversold (23.68),bullish
+2026-09-10T12:00:59,RELIANCE,Fresh bearish MACD crossover,bearish
+2026-09-10T12:00:59,SBIN,Fresh bullish 200EMA crossover,bullish
+2026-09-10T12:00:59,TATACONSUM,RSI oversold (26.96),bullish
+2026-09-10T12:00:59,TMPV,RSI oversold (27.83),bullish
+2026-09-10T12:00:59,BLS,RSI oversold (19.53),bullish
+2026-09-10T12:01:05,ATULAUTO,RSI oversold (20.95),bullish
+2026-09-10T12:01:19,SETFNIF50,RSI oversold (16.03),bullish
+2026-09-10T12:02:10,BLS,RSI oversold (19.53),bullish
+2026-09-10T12:02:10,CASTROLIND,Fresh bullish MACD crossover,bullish
+2026-09-10T12:02:10,CASTROLIND,Volume spike 2.07x avg — Selling,bearish
+2026-09-10T12:13:12,BLS,RSI oversold (18.96),bullish
+2026-09-10T12:13:12,CASTROLIND,Fresh bullish MACD crossover,bullish
+2026-09-10T12:13:12,CASTROLIND,Volume spike 2.07x avg — Selling,bearish
+2026-09-10T12:13:25,BLS,RSI oversold (18.96),bullish
+2026-09-10T12:13:25,CASTROLIND,Fresh bullish MACD crossover,bullish
+2026-09-10T12:13:25,CASTROLIND,Volume spike 2.07x avg — Selling,bearish
+2026-09-10T16:49:57,CPCAP,Fresh bullish MACD crossover,bullish
+2026-09-10T20:43:19,ASIANPAINT,RSI oversold (26.62),bullish
+2026-09-10T20:43:23,HDFCBANK,Fresh bearish MACD crossover,bearish
+2026-09-10T20:43:27,HUDCO,RSI oversold (23.88),bullish
+2026-09-10T20:43:39,IRCON,RSI oversold (15.22),bullish
+2026-09-10T20:43:43,IRFC,RSI oversold (15.14),bullish
+2026-09-10T20:43:47,LATENTVIEW,RSI oversold (25.26),bullish
+2026-09-10T20:44:08,RVNL,RSI oversold (22.98),bullish
+2026-09-10T20:44:12,RELIANCE,Fresh bearish MACD crossover,bearish
+2026-09-10T20:44:12,SBIN,Fresh bullish 200EMA crossover,bullish
+2026-09-10T20:44:19,SUZLON,Fresh bearish MACD crossover,bearish
+2026-09-10T20:44:23,TATACONSUM,RSI oversold (25.5),bullish
+2026-09-10T20:44:31,TMPV,RSI oversold (26.98),bullish
+2026-09-10T20:44:59,ASIANPAINT,RSI oversold (26.62),bullish
+2026-09-10T20:44:59,HDFCBANK,Fresh bearish MACD crossover,bearish
+2026-09-10T20:44:59,HUDCO,RSI oversold (23.88),bullish
+2026-09-10T20:44:59,IRCON,RSI oversold (15.22),bullish
+2026-09-10T20:44:59,IRFC,RSI oversold (15.14),bullish
+2026-09-10T20:44:59,LATENTVIEW,RSI oversold (25.26),bullish
+2026-09-10T20:44:59,RVNL,RSI oversold (22.98),bullish
+2026-09-10T20:44:59,RELIANCE,Fresh bearish MACD crossover,bearish
+2026-09-10T20:44:59,SBIN,Fresh bullish 200EMA crossover,bullish
+2026-09-10T20:44:59,SUZLON,Fresh bearish MACD crossover,bearish
+2026-09-10T20:44:59,TATACONSUM,RSI oversold (25.5),bullish
+2026-09-10T20:44:59,TMPV,RSI oversold (26.98),bullish
+2026-09-10T20:45:03,BLS,RSI oversold (17.87),bullish
+2026-09-10T20:45:26,ABSLAMC,RSI overbought (71.05),bearish
+2026-09-10T20:45:26,ABSLAMC,Volume spike 1.98x avg — Buying,bullish
+2026-09-10T20:45:30,ATULAUTO,RSI oversold (21.18),bullish
+2026-09-10T20:45:50,SETFNIF50,RSI oversold (15.53),bullish
+2026-09-10T20:47:28,BLS,RSI oversold (17.87),bullish
+2026-09-10T20:47:32,CASTROLIND,Fresh bullish MACD crossover,bullish
+2026-09-10T20:47:32,CASTROLIND,Volume spike 2.72x avg — Selling,bearish
+2026-09-10T20:47:36,EMMVEE,Volume spike 3.08x avg — Buying,bullish
+2026-09-10T20:48:48,ASIANPAINT,RSI oversold (26.62),bullish
+2026-09-10T20:48:49,HDFCBANK,Fresh bearish MACD crossover,bearish
+2026-09-10T20:48:49,HUDCO,RSI oversold (23.88),bullish
+2026-09-10T20:48:49,IRCON,RSI oversold (15.22),bullish
+2026-09-10T20:48:49,IRFC,RSI oversold (15.14),bullish
+2026-09-10T20:48:49,LATENTVIEW,RSI oversold (25.26),bullish
+2026-09-10T20:48:49,RVNL,RSI oversold (22.98),bullish
+2026-09-10T20:48:49,RELIANCE,Fresh bearish MACD crossover,bearish
+2026-09-10T20:48:49,SBIN,Fresh bullish 200EMA crossover,bullish
+2026-09-10T20:48:49,SUZLON,Fresh bearish MACD crossover,bearish
+2026-09-10T20:48:49,TATACONSUM,RSI oversold (25.5),bullish
+2026-09-10T20:48:49,TMPV,RSI oversold (26.98),bullish
+2026-09-10T20:48:50,BLS,RSI oversold (17.87),bullish
+2026-09-10T20:48:50,ABSLAMC,RSI overbought (71.05),bearish
+2026-09-10T20:48:50,ABSLAMC,Volume spike 1.98x avg — Buying,bullish
+2026-09-10T20:48:50,ATULAUTO,RSI oversold (21.18),bullish
+2026-09-10T20:48:50,SETFNIF50,RSI oversold (15.53),bullish

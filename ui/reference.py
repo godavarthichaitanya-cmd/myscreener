@@ -14,7 +14,9 @@ Two sub-tabs:
     calling get_explainer() with a guessed label risks a silent None, so
     these two are described directly here instead. If get_explainer()
     returns None for any of the 16 (label mismatch), a fallback note
-    shows instead of a blank line.
+    shows instead of a blank line. Also documents the Short Term View
+    decision verdicts (Sept 2026) — same "why does this exist" treatment
+    as the PP verdict thresholds below it.
   How to Read — a full narrative walkthrough: what the tool is for, what
     each tab does, and a worked example using illustrative (not live)
     numbers for a hypothetical stock, clearly labeled as illustrative
@@ -39,6 +41,24 @@ _CATEGORIES = {
 _MANUAL_CHECKS = [
     ("Promoter pledge 0%", "Passes when the promoter pledge % you entered in a stock's \"Your data\" section is 0. A non-zero pledge means promoters have put their own shares up as loan collateral — a red flag if it's high, since a forced sale on default can hit the stock hard. This has to be entered by hand because it isn't in yfinance's data."),
     ("EPS CAGR above 12%", "Passes when the 5-year EPS CAGR % you entered (typically pulled from Screener.in) is above 12%. This is the manual figure that takes priority for Graham Fair Value too, over the auto-fetched 3-year fallback, because the auto version can't detect corporate actions like mergers or bonus issues that distort a naive year-over-year comparison."),
+]
+
+# Mirrors core/short_term_decision.py's VERDICT_COLORS keys and copy —
+# kept here as plain reference text rather than importing decide_action's
+# strings directly, since this tab is meant to work standalone with no
+# computation.
+_SHORT_TERM_VERDICTS = [
+    ("🟢 Momentum buy setup", "Trend + MACD + volume all bullish — the only verdict with three-way confirmation. The closest thing to a green light this tool produces."),
+    ("🟢 Reversal confirming", "RSI oversold AND a fresh bullish MACD/EMA200 crossover just fired. The specific combination that separates \"bounce starting\" from \"still falling\"."),
+    ("🔵 Bullish, unconfirmed by volume", "Trend + MACD bullish, but no unusual buying volume backing it. Workable, lower conviction — size down or just watch."),
+    ("🔵 Mild bullish lean", "Only one of trend/RSI/MACD agrees bullish. A lean, not a setup — a watch-item, not an entry."),
+    ("🟡 Caution — extended", "Bullish and RSI is overbought. Momentum is real but chasing here risks buying right before a pullback — wait for a dip toward the 200EMA."),
+    ("🟡 Wait — reversal not confirmed", "RSI is oversold but trend/MACD haven't turned up yet. Entering now is betting on a bounce with no confirmation it's started."),
+    ("🟠 Mild bearish lean", "Only one of trend/RSI/MACD agrees bearish. Not strong enough to force an exit on its own if already held."),
+    ("🔴 Avoid — active selling", "Trend + MACD bearish AND volume shows active selling. If holding, a signal to reassess; not a name to enter fresh."),
+    ("🔴 Avoid — clear downtrend", "Trend + MACD both bearish with no reversal signal — RSI isn't even oversold yet, so there may be more room to fall."),
+    ("🔴 Avoid — overbought, trend not confirming", "RSI stretched above 70 with nothing backing it up — often precedes a reversal down rather than further upside."),
+    ("⚪ No clear setup", "Trend, RSI, and MACD are roughly balanced. Nothing to act on either direction right now."),
 ]
 
 
@@ -98,6 +118,52 @@ def _render_glossary():
         "- **Dividend yield, ATR (volatility), 52-week-high proximity** — shown for context, no pass/fail attached."
     )
 
+    st.markdown("#### Combined Signal (Single Stock)")
+    st.caption(
+        "Single Stock shows one more banner above the PP Framework / Sampat Mode panels once you Evaluate — it "
+        "merges the PP verdict (long-term) with the Short Term View verdict (pure momentum, no fundamentals) "
+        "computed off the same fetched data, no separate scan needed."
+    )
+    st.markdown(
+        "- 🟢🟢 **BUY — both sides confirm** — the ONLY case that says BUY: PP verdict is Deploy-ready AND Short "
+        "Term View hit its top verdict (Momentum buy setup or Reversal confirming). Everything else below is a "
+        "more qualified sentence, not a label — a good business with unconfirmed short-term momentum (e.g. "
+        "bullish trend but no volume backing it) does NOT get called BUY, on purpose.\n"
+        "- **Good business, decent timing** — PP Deploy-ready, Short Term leaning bullish but not fully "
+        "confirmed. Reasonable to start a position; not the strongest case.\n"
+        "- **Good business — wait on entry timing** — PP Deploy-ready, but Short Term says wait (overbought or "
+        "an unconfirmed oversold reversal).\n"
+        "- **Good business, weak near-term** — PP Deploy-ready, but the short-term picture is currently "
+        "negative. Sticking to a GTT/staggered entry rather than buying at market.\n"
+        "- **Good business, no timing signal either way** — PP Deploy-ready, Short Term flat/mixed.\n"
+        "- **Short-term opportunity only — not a V13 add** — PP is Watch, but Short Term hit its top verdict. "
+        "A trade with its own stop, not a long-term position — the business hasn't earned that yet.\n"
+        "- **Mixed — business still Watch-stage** — PP is Watch and Short Term isn't strong enough to change "
+        "that framing.\n"
+        "- **Caution — technical bounce only** — PP is Avoid, but Short Term shows a buy-tier signal. A pure "
+        "momentum trade against a business the framework has flagged as weak — high risk, not a V13 candidate.\n"
+        "- **Avoid** — PP is Avoid and Short Term isn't showing a strong enough signal to caveat that."
+    )
+    st.write("")
+
+    st.markdown("#### Short Term View verdicts")
+    st.caption(
+        "A completely separate decision framework from the PP verdict above — no fundamentals involved at all, just "
+        "trend (200EMA), RSI zone, MACD, and volume, combined into one of 11 verdicts. Checked in priority order: "
+        "overbought RSI first, then oversold RSI (specifically checking for a confirming crossover), then everything "
+        "else falls through to the plain bullish-vs-bearish vote count. Only the two 🟢 verdicts are genuine \"look "
+        "closer\" signals — everything else is either a lean, a wait, or an avoid."
+    )
+    for headline, reason in _SHORT_TERM_VERDICTS:
+        st.markdown(f"**{headline}**")
+        st.caption(reason)
+    st.write("")
+    st.caption(
+        "Position sizing (stop-loss and quantity) only shows underneath the two 🟢 verdicts as something worth "
+        "acting on — for every other verdict it's still shown, but read it as \"if you were already holding this, "
+        "here's your reference stop,\" not as an entry signal."
+    )
+
 
 def _render_howto():
     st.markdown(
@@ -154,6 +220,14 @@ hasn't cleared the fundamentals bar yet. That's the tool telling you:
 - **The tabs above Evaluate** (Overview, Fundamentals, Technicals,
   Valuation & Quality, Chart) are all just the *raw data* — nothing is
   scored yet. Nothing gets logged to history until you click Evaluate.
+- **The combined signal banner**, right above the two score panels once
+  you Evaluate, merges the PP verdict with a Short Term View read
+  computed off the same fetched data — no separate scan. It's
+  deliberately conservative with the word BUY: that only appears when
+  PP is Deploy-ready AND Short Term hits its top verdict. Every other
+  combination (e.g. a Deploy-ready stock with unconfirmed short-term
+  momentum) gets an honest, specific sentence instead — see "Combined
+  Signal" in the Check Glossary tab for the full set.
 - **The two score panels** (PP Framework, Sampat Mode) are the actual
   answer. Sampat Mode is a stricter second opinion — same idea, tighter
   bar (near-zero debt, fundamentals-only, no technicals at all).
@@ -191,6 +265,16 @@ hasn't cleared the fundamentals bar yet. That's the tool telling you:
 - **Signals** — similarly lightweight, but framed as a directional
   read: how many of EMA trend / RSI / MACD are leaning bullish vs.
   bearish right now, single stock or across a queue.
+- **Short Term View** — combines Alerts and Signals against a dedicated
+  short-term watchlist (separate from the V13 queue), then goes one step
+  further than either: instead of leaving you to interpret raw vote
+  counts, it hands back one verdict with a plain-English reason (see the
+  Short Term View verdicts section in the Check Glossary tab), plus an
+  ATR-based stop-loss and position size sized to a capital pool you set
+  aside specifically for short-term trades — completely separate from
+  V13's long-term capital and completely separate from the PP Framework's
+  fundamentals. This tab answers "is there a short-term trade here right
+  now," not "is this a good business."
 
 ---
 
@@ -200,5 +284,8 @@ If you only remember one thing: **green means both the business and the
 chart currently agree it's a reasonable entry; yellow means only one of
 them does; red means neither does.** Everything else in this tool exists
 to help you see *why* a stock landed where it did, not just *that* it did.
+Short Term View follows the same spirit on a faster clock: it's not
+telling you the business is good, only that the trend/momentum/volume
+picture right now does or doesn't support a short-term trade.
 """
     )
